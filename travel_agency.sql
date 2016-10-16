@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 16, 2016 at 10:18 PM
+-- Generation Time: Oct 16, 2016 at 11:32 PM
 -- Server version: 5.6.26
 -- PHP Version: 5.6.14
 
@@ -29,6 +29,18 @@ SET time_zone = "+00:00";
 CREATE TABLE `airline` (
   `id` int(11) NOT NULL,
   `name` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `airport`
+--
+
+CREATE TABLE `airport` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `city_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -86,9 +98,10 @@ CREATE TABLE `callout_order` (
   `employee_id` int(11) NOT NULL,
   `created_at` int(11) NOT NULL,
   `payment` int(7) NOT NULL,
-  `payment_at` int(11) NOT NULL,
+  `payment_at` int(11) DEFAULT NULL,
   `is_discount` int(1) NOT NULL DEFAULT '0',
-  `canceling_at` int(11) DEFAULT NULL
+  `canceling_at` int(11) DEFAULT NULL,
+  `status` enum('оплачено','отменено','в ожидание','просрочено') NOT NULL DEFAULT 'в ожидание'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -184,10 +197,8 @@ CREATE TABLE `flight` (
   `id` int(11) NOT NULL,
   `airline_id` int(11) DEFAULT NULL,
   `code` varchar(10) NOT NULL,
-  `from_city_id` int(11) NOT NULL,
-  `from_airport_name` varchar(30) NOT NULL,
-  `to_city_id` int(11) NOT NULL,
-  `to_airport_name` varchar(30) NOT NULL,
+  `from_airport_id` int(11) NOT NULL,
+  `to_airport_id` int(11) NOT NULL,
   `flight_at` int(11) NOT NULL,
   `duration` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -214,6 +225,7 @@ CREATE TABLE `food` (
 CREATE TABLE `hotel` (
   `id` int(11) NOT NULL,
   `tour_id` int(11) DEFAULT NULL,
+  `city_id` int(11) NOT NULL,
   `name` varchar(15) NOT NULL,
   `address` varchar(100) NOT NULL,
   `stars_number` int(1) NOT NULL,
@@ -314,7 +326,9 @@ CREATE TABLE `room` (
 CREATE TABLE `route` (
   `id` int(11) NOT NULL,
   `type` enum('автобус','такси','','') NOT NULL,
-  `starting_address` varchar(150) NOT NULL,
+  `from_airport_id` int(11) DEFAULT NULL,
+  `to_airport_id` int(11) DEFAULT NULL,
+  `starting_address` varchar(150) DEFAULT NULL,
   `starting_time` time NOT NULL,
   `final_address` varchar(150) NOT NULL,
   `duration` int(5) NOT NULL,
@@ -359,6 +373,14 @@ CREATE TABLE `transfer` (
 ALTER TABLE `airline`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Indexes for table `airport`
+--
+ALTER TABLE `airport`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`,`city_id`),
+  ADD KEY `city_id` (`city_id`);
 
 --
 -- Indexes for table `airseat`
@@ -445,8 +467,8 @@ ALTER TABLE `excursion_order`
 ALTER TABLE `flight`
   ADD PRIMARY KEY (`id`),
   ADD KEY `airline_id` (`airline_id`),
-  ADD KEY `from_city_id` (`from_city_id`),
-  ADD KEY `to_city_id` (`to_city_id`);
+  ADD KEY `from_airport_id` (`from_airport_id`),
+  ADD KEY `to_airport_id` (`to_airport_id`);
 
 --
 -- Indexes for table `food`
@@ -462,7 +484,8 @@ ALTER TABLE `hotel`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `tour_id_2` (`tour_id`,`name`),
   ADD KEY `tour_id` (`tour_id`),
-  ADD KEY `food_id` (`food_id`);
+  ADD KEY `food_id` (`food_id`),
+  ADD KEY `city_id` (`city_id`);
 
 --
 -- Indexes for table `hotel_service`
@@ -516,7 +539,9 @@ ALTER TABLE `room`
 -- Indexes for table `route`
 --
 ALTER TABLE `route`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `from_airport_id` (`from_airport_id`),
+  ADD KEY `to_airport_id` (`to_airport_id`);
 
 --
 -- Indexes for table `tour`
@@ -542,6 +567,11 @@ ALTER TABLE `transfer`
 -- AUTO_INCREMENT for table `airline`
 --
 ALTER TABLE `airline`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `airport`
+--
+ALTER TABLE `airport`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `airseat`
@@ -658,6 +688,12 @@ ALTER TABLE `transfer`
 --
 
 --
+-- Constraints for table `airport`
+--
+ALTER TABLE `airport`
+  ADD CONSTRAINT `airport_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `airseat`
 --
 ALTER TABLE `airseat`
@@ -716,15 +752,16 @@ ALTER TABLE `excursion_order`
 --
 ALTER TABLE `flight`
   ADD CONSTRAINT `flight_ibfk_1` FOREIGN KEY (`airline_id`) REFERENCES `airline` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `flight_ibfk_2` FOREIGN KEY (`from_city_id`) REFERENCES `city` (`id`),
-  ADD CONSTRAINT `flight_ibfk_3` FOREIGN KEY (`to_city_id`) REFERENCES `city` (`id`);
+  ADD CONSTRAINT `flight_ibfk_4` FOREIGN KEY (`from_airport_id`) REFERENCES `airport` (`id`),
+  ADD CONSTRAINT `flight_ibfk_5` FOREIGN KEY (`to_airport_id`) REFERENCES `airport` (`id`);
 
 --
 -- Constraints for table `hotel`
 --
 ALTER TABLE `hotel`
   ADD CONSTRAINT `hotel_ibfk_1` FOREIGN KEY (`tour_id`) REFERENCES `tour` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `hotel_ibfk_2` FOREIGN KEY (`food_id`) REFERENCES `food` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `hotel_ibfk_2` FOREIGN KEY (`food_id`) REFERENCES `food` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `hotel_ibfk_3` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`);
 
 --
 -- Constraints for table `hotel_service`
@@ -759,6 +796,13 @@ ALTER TABLE `person_transfer`
 --
 ALTER TABLE `room`
   ADD CONSTRAINT `room_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotel` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `route`
+--
+ALTER TABLE `route`
+  ADD CONSTRAINT `route_ibfk_1` FOREIGN KEY (`from_airport_id`) REFERENCES `airport` (`id`),
+  ADD CONSTRAINT `route_ibfk_2` FOREIGN KEY (`to_airport_id`) REFERENCES `airport` (`id`);
 
 --
 -- Constraints for table `tour`
