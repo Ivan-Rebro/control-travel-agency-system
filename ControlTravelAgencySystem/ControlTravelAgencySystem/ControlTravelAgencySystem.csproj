@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,11 +40,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.Entity.6.9.9\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -60,9 +78,6 @@
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -168,6 +183,87 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\airline.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\airport.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\airseat.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\airticket.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\callout.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\callout_order.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\callout_room.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\city.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\country.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\employee.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\excursion.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\excursion_order.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\flight.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\food.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hotel.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hotel_service.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hotel_service_order.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\person.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\room.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\route.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tour.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\transfer.cs">
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TravelSystemDataModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TravelSystemDataModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TravelSystemDataModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TravelSystemDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TravelSystemDataModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TravelSystemDataModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -227,7 +323,24 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <EntityDeploy Include="Models\TravelSystemDataModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>TravelSystemDataModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\TravelSystemDataModel.edmx.diagram">
+      <DependentUpon>TravelSystemDataModel.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Models\TravelSystemDataModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TravelSystemDataModel.edmx</DependentUpon>
+      <LastGenOutput>TravelSystemDataModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\TravelSystemDataModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TravelSystemDataModel.edmx</DependentUpon>
+      <LastGenOutput>TravelSystemDataModel.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -287,6 +400,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
